@@ -55,7 +55,7 @@ class jse_scraper(object):
        except:
            logger.error(f'Could not load the baseUrl : {self.base_url}')
        else:
-           time.sleep(10)
+           time.sleep(5)
            stock_daily = self.driver.execute_script('return window.Highcharts.charts[2]'
 
           #temp3 = driver.execute_script('return window.Highcharts.charts[2]'
