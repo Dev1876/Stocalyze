@@ -26,16 +26,20 @@ logger.addHandler(stream_handler)
 
 class jse_scraper(object):
 
-   chrome_options.binary_location = os.getenv("GOOGLE_CHROME_BIN")
-   chrome_options.add_argument("--headless")
-   chrome_options.add_argument("--disable-dev-shm-usage")
-   chrome_options.add_argument("--no-sandbox")
-   driver = webdriver.Chrome(executable_path=os.getenv("CHROMEDRIVER_PATH"), chrome_options=chrome_options)
+    
 
+#    chrome_options.binary_location = os.getenv("GOOGLE_CHROME_BIN")
+#    chrome_options.add_argument("--headless")
+#    chrome_options.add_argument("--disable-dev-shm-usage")
+#    chrome_options.add_argument("--no-sandbox")
+#    driver = webdriver.Chrome(executable_path=os.getenv("CHROMEDRIVER_PATH"), chrome_options=chrome_options)
+
+   driver = webdriver.Chrome('driver\chromedriver.exe')
    base_url = "https://www.jamstockex.com/market-data/"
    instruments_url = "instruments/?symbol="
    listed_companies_url = "listed-companies/"
    junior_market = "/junior-market"
+   main_market = "/main-market"
    listed_table_xpath ="//*[@id='content']/div[2]/div/div/div/div/table[1]"
    '''/// baseurl for the stock ohlc data'''
    ohlc_url = "https://www.jamstockex.com/market-data/instruments/?symbol="
@@ -94,15 +98,16 @@ class jse_scraper(object):
 
    def get_Junior_listedCompany_page(self):
         logger.info(f'fetching the list of junior stocks from the JSE')
-        try:
-            self.driver.get(self.base_url+'{}{}'.format(self.listed_companies_url,self.junior_market))
-        except:
-            logger.error(f'Cound not load the Junior Market Index page of the JSE')
-        else:
-            time.sleep(5)
+       # try:
+        self.driver.get(self.base_url+'{}{}'.format(self.listed_companies_url,self.junior_market))
+        #self.driver.get(self.base_url+'{}{}'.format(self.listed_companies_url,self.junior_market))
+       # except:
+        #    logger.error(f'Cound not load the Junior Market Index page of the JSE')
+        #else:
+         #   time.sleep(5)
         # table = self.browser.find_element_by_xpath(self.listed_table_xpath)
 
-            html = self.driver.page_source
+        html = self.driver.page_source
 
         #self.driver.find_element(By.i,'table table-striped table-hover');
         page_soup = Soup(html,"html.parser")
@@ -137,14 +142,15 @@ class jse_scraper(object):
         return jsonAray
 
    def get_Main_listedCompany_page(self):
-        self.base_url+'{}'.format(self.listed_companies_url)
-        try:
-            self.driver.get(self.base_url)
-        except:
-            logger.error(f'Could not load the JSE Page to shows the list of Main Index stocks:{self.base_url}')
-        else:
-            time.sleep(5)
-            html = self.driver.page_source
+        logger.info(f'fetching the list of junior stocks from the JSE')
+        #try:
+        self.driver.get(self.base_url+'{}{}'.format(self.listed_companies_url,self.main_market))
+        #except:
+        logger.error(f'Cound not load the Junior Market Index page of the JSE')
+        #else:
+        #    time.sleep(5)
+
+        html = self.driver.page_source
 
         #self.driver.find_element(By.i,'table table-striped table-hover');
         page_soup = Soup(html,"html.parser")

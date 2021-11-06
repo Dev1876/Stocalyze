@@ -1,55 +1,72 @@
-from fastapi import FastAPI
-#from database import SessionLocal, engine
-from sqlalchemy.orm import Session
+from os import name
+from fastapi import FastAPI,status,HTTPException
+from database import SessionLocal, engine
 from pydantic import BaseModel
-from typing import Optional
-#import models
-#from models import Stock_SVL
-#from crud import get_stocklist
-#from chart import stock_chart
+from typing import List, Optional,List
+import models
+import schemas
+
 
 app = FastAPI()
 
+db = SessionLocal()
 
 
-class Stock(BaseModel): # serializer
-    id:int
-    name:str
-    description:str
-    market: str
-    signal: bool
+@app.get('/juniortmarket',response_model=List[schemas.juniormarket],status_code=200)
+def get_juniormarketlisting():
+    juniorlisting = db.query(models.juniormarket_list).all()
+    return juniorlisting
+
+@app.get('/juniormarket/{juniormarket_id}',response_model=schemas.juniormarket,status_code=status.HTTP_200_OK)
+def get_an_juniormarket_stock(juniormarket_id:int):
+    juniormarket_stock = db.query(models.juniormarket_list).filter(models.juniormarket_list.id==juniormarket_id).first()
+    return juniormarket_stock
+
+@app.post('/juniormarket',response_model=schemas.juniormarket,status_code=status.HTTP_201_CREATED)
+def add_juniormarket_stock(juniormarket:schemas.juniormarket):
+
+    stockexist = db.query(models.juniormarket_list).filter(schemas.juniormarket.Name == juniormarket.Name).first()
+
+    if stockexist is not None:
+        raise HTTPException(status_code=400,detail="Stock Already exist")
 
 
-@app.get('/')
-def index():
-    return{"message":"Welcome to Stocalyze"}
-
-#models.Base.metadata.create_all(bind=engine)
-
-
-@app.get('/greet/{name}')
-def greet_name(name:str):
-    return {"greeting":f"Hello {name}"}
-
-
-
-@app.get('/greet')
-def greet_optional_name(name:Optional[str]="user"):
-    return {"message":f"Hello {name}"}
+    new_jnrmrkt_stock = models.juniormarket_list(
+        Name = juniormarket.Name,Instrument_Code = juniormarket.Instrument_Code,Currency = juniormarket.Currency,Sector = juniormarket.Sector,Type = juniormarket.Type
+    )
+   
     
 
-@app.put('/stock/{stock_id}')
-def update_stock(stock_id:int,stock:Stock):
-    return{'name':stock.name,
-    'description':stock.description,
-    'market':stock.market,
-    'signal':stock.signal
-    }
+    db.add(new_jnrmrkt_stock)
+    db.commit()
+    return new_jnrmrkt_stock
 
 
-'''
-ref : https://www.youtube.com/watch?v=xi96vi5X_Ak
-'''
+@app.put('/juniormarket/{juniormarket_id}',response_model=schemas.juniormarket,status_code=status.HTTP_200_OK)
+def update_juniormarket_stock(juniormarket_id:int,jnrmrketstock:schemas.juniormarket):
+    stock_to_update = db.query(models.juniormarket_list).filter(models.juniormarket_list.id==juniormarket_id).first()
+    stock_to_update.name = jnrmrketstock.Name
+    stock_to_update.Instrument_Code = jnrmrketstock.Instrument_Code
+    stock_to_update.Currency = jnrmrketstock.Currency
+    stock_to_update.Sector = jnrmrketstock.Sector
+    stock_to_update.Type = jnrmrketstock.Type
+
+    db.commit()
+    return stock_to_update
+
+@app.delete('/juniormarket/{juniormarket_id}',response_model=schemas.juniormarket,status_code=status.HTTP_200_OK)
+def delete_juniormarket_stock(juniormarket_id:int):
+    junior_stock_delete = db.query(models.juniormarket_list).filter(models.juniormarket_list.id==juniormarket_id).first()
+    if junior_stock_delete is None:
+       raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,detail="Resource Not Found")
+
+
+    db.delete(junior_stock_delete)
+    db.commit()
+
+    return junior_stock_delete
+
+
 
 #templates = Jinja2Templates(directory="templates")
 
