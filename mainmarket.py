@@ -34,6 +34,7 @@ class MainMarket(object):
         module = __import__("models")
         stockClass_list = getattr(module,mainMarket)
         record = self.db.query(stockClass_list.Instrument_Code).all()
+        
         return record
 
 

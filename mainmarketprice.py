@@ -88,11 +88,10 @@ class MainMarketPrices(object):
         else:
             logger.info(f"stock_{self.Instrument_Code} Table does not exist")
 
-        
 
 
-if __name__ == '__main__':
-    stock = MainMarketPrices('null')
+def get_mainmarketPrices():
+    #stock = MainMarketPrices('null')
     mainMarket = MainMarket()
     stock_list = mainMarket.LoadMainMarketListed()
     logger.info(stock_list)
@@ -100,3 +99,14 @@ if __name__ == '__main__':
         setup = MainMarketPrices(symbols[0])
         logger.info(f'Loading the Price for the Main index stock {symbols[0]}')
         setup.LoadStock_data()
+
+
+# if __name__ == '__main__':
+#     stock = MainMarketPrices('null')
+#     mainMarket = MainMarket()
+#     stock_list = mainMarket.LoadMainMarketListed()
+#     logger.info(stock_list)
+#     for symbols in stock_list:
+#         setup = MainMarketPrices(symbols[0])
+#         logger.info(f'Loading the Price for the Main index stock {symbols[0]}')
+#         setup.LoadStock_data()

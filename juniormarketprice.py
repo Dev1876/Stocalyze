@@ -78,24 +78,28 @@ class JuniorMarketPrices(object):
 
 
 
+def testscheduler():
+    print('I am working form jse junior prices')
 
-#def run_scraper():
-   # print(f"fetching the lastest prices from the junior market listings for{datetime.now().isoformat()}")
-
-#schedule.every().day.at("11:45").do(run_scraper)
-#schedule.every(5).seconds.do(run_scraper)
-
-# while True:
-#     schedule.run_pending()
-#     datetime.sleep(1)
-
-if __name__ == '__main__':
+def get_juiormarketPrices():
     stock = JuniorMarketPrices('null')
-    JuniorMarket = JuniorMarket()
-    stock_list = JuniorMarket.GetJuniorMarketListed()
-    print(stock_list)
-    #list =   stock.LoadStock_data('JuniorMarketStock_list')
-    #stock_list = LoadStock_list()
-    for symbols in stock_list:
+    list =   stock.LoadStock_data('JuniorMarketStock_list')
+    for symbols in list:
         setup = JuniorMarketPrices(symbols[0])
+        logger.info(f'Loading the Price for the Junior index stock {symbols[0]}')
         setup.LoadStock_data()
+
+   
+
+
+# if __name__ == '__main__':
+#     stock = JuniorMarketPrices('null')
+#     JuniorMarket = JuniorMarket()
+#     #stock_list = JuniorMarket.GetJuniorMarketListed()
+#     #logger.info(stock_list)
+#     list =   stock.LoadStock_data('JuniorMarketStock_list')
+#     #stock_list = LoadStock_list()
+#     for symbols in list:
+#         setup = JuniorMarketPrices(symbols[0])
+#         logger.info(f'Loading the Price for the Junior index stock {symbols[0]}')
+#         setup.LoadStock_data()
