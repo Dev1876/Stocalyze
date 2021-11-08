@@ -14,7 +14,6 @@ python-telegram-bot==13.7
 schedule==1.1.0
 selenium==3.141.0
 SQLAlchemy==1.4.20
-TA-Lib
 typing==3.7.4.3
 typing-extensions==3.10.0.0
 uvicorn==0.14.0
