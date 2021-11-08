@@ -43,6 +43,8 @@ class stock_SuperTrend:
                     
                 if not data['in_uptrend'][current] and data['upperband'][current] > data['upperband'][previous]:
                     data['upperband'][current] = data['upperband'][previous]
+        strend_signal = data['in_uptrend'][-1]
+        return strend_signal
 
         print (data)
 

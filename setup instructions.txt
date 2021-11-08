@@ -1,0 +1,42 @@
+set up virtual env
+python -m venv env
+
+
+active virtual env
+source/scripts/activate
+
+
+set up requirments text file 
+
+install libraries
+pip3  install -r requirments.txt
+
+
+run uvicorn 
+git 
+
+pgadmin/pgadminPassword
+
+
+postgres/dev876@postgres
+
+
+Git
+
+git init
+
+git status
+git add 
+git commit - m
+
+git checkout -b 'new branch'
+
+git checkout master
+
+bring changes from master to branch
+
+git merge master
+
+git pull origin master
+
+pit pull origin master
