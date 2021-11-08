@@ -34,8 +34,8 @@ logging.basicConfig(
     level = logging.INFO
 )
 
-#TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
-TOKEN = '742984207:AAEPz6Wb37zMkB9g28wHz1z-cMNS5MiOnaQ'
+TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
+#TOKEN = '742984207:AAEPz6Wb37zMkB9g28wHz1z-cMNS5MiOnaQ'
 PORT = os.getenv('PORT', default=8443)
 #JuniorMarket = JuniorMarket()
 #Jstock_list = JuniorMarket.GetJuniorMarketListed()
