@@ -1,6 +1,78 @@
 from database import Base
-from sqlalchemy import Integer, String, Column, ForeignKey
+from sqlalchemy import Integer, String, Column, ForeignKey,Boolean
 from basemodel import templatemodel
+import logging
+from database import SessionLocal
+from telegram import user
+
+logging.basicConfig(
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    level=logging.INFO
+)
+logger = logging.getLogger(__name__)
+
+class User(Base):
+	__tablename__="users"
+	user_id = Column(Integer,primary_key=True)
+	portfolio = Column(String)
+	watchlist = Column(String)
+	is_subscribed = Column(Boolean,default=True)
+
+	
+
+	temp = Column
+	teamp = Column
+
+	def __repr__(self):
+		return "<User(user_id='%s', portfolio='%s', watchlist='%s', " "is_subscribed='%s')>" % (self.user_id, self.portfolio,self.watchlist, self.is_subscribed)
+
+	def __call__(self):
+		return {
+			"portfolio":self.portfolio,
+			"watchlist":self.watchlist,
+			"is_subscribed":self.is_subscribed
+		}
+	
+	def get_user(session:SessionLocal,userid:int):
+		"""Queries a user from database
+		Args:
+		user_id(int): User's telegram id
+
+		Returns:
+		Users:Instance of User class
+		"""
+		logger.info(f"Retrieving user info for user{userid}")
+		curr_user = session.query(User).filter_by(user_id=userid).first()
+
+		# Prepare a ne User object if the user is not found in DB
+		if not curr_user:
+			return User(user_id=userid,portfolio="[]",watchlist="[]")
+		return curr_user
+
+	def update_userdb(session:SessionLocal,User:user)->None:
+		""" Creates a User object within session before commit()
+		Args:
+			user_id(int):User's telegram ID
+		"""
+			
+		try:
+			session.add(User)
+			session.commit()
+			logger.info(f"Successfully updated db with {User} ")
+		except Exception as e:
+			logger.error(f"{e}")
+
+	def get_subscribers(session:SessionLocal):
+		subscribers = session.query(User).filter_by(is_subscribed=True).all()
+		return subscribers
+	
+	def unsubscribe_user(session: SessionLocal, User: user) -> None:
+		"""
+		Unsubscribe a user if he/she has removed the bot from the Telegram application
+		"""
+		session.query(User).filter_by(user_id=user.user_id).update({"is_subscribed": False  })
+		session.commit()
+
 
 class strategy(Base):
 	__tablename__ = "strategy"
@@ -33,7 +105,6 @@ class juniormarket_list (Base):
 	Sector = Column(String)
 	Type = Column(String)
 	Sentiment = Column(String)
-
 
 
 class stock_AFS (templatemodel,Base):
