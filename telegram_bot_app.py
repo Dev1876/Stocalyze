@@ -356,9 +356,9 @@ def main() -> None:
 # 'start_polling' for local dev; webhook for production
 # updater.start_polling()
 
-    #updater.start_webhook(listen="0.0.0.0",port=PORT,url_path=TOKEN,webhook_url='https://stockegy-bot.herokuapp.com/'+TOKEN)  
+    updater.start_webhook(listen="0.0.0.0",port=PORT,url_path=TOKEN,webhook_url='https://stockegy-bot.herokuapp.com/'+TOKEN)  
     #Start teh Bot
-    updater.start_polling()
+    #updater.start_polling()
 
      # Block until the user presses Ctrl-C or the process receives SIGINT,
     # SIGTERM or SIGABRT. This should be used most of the time, since
